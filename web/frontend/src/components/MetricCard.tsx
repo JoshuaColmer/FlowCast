@@ -1,4 +1,4 @@
-import { TrendingUp, TrendingDown, DollarSign, Flame, Receipt, Minus } from 'lucide-react';
+import { TrendingUp, DollarSign, Flame, Receipt } from 'lucide-react';
 
 interface MetricCardProps {
   label: string;
@@ -9,48 +9,81 @@ interface MetricCardProps {
 }
 
 export function MetricCard({ label, value, status, subtitle, icon }: MetricCardProps) {
-  const getStatusColor = () => {
+  const getStatusStyles = () => {
     switch (status) {
       case 'green':
-        return 'bg-emerald-500';
+        return {
+          dot: 'bg-emerald-500',
+          glow: 'shadow-glow-green',
+        };
       case 'yellow':
-        return 'bg-amber-500';
+        return {
+          dot: 'bg-amber-500',
+          glow: 'shadow-glow-yellow',
+        };
       case 'red':
-        return 'bg-red-500';
+        return {
+          dot: 'bg-red-500',
+          glow: 'shadow-glow-red',
+        };
       default:
-        return 'bg-surface-500';
+        return {
+          dot: 'bg-white/30',
+          glow: '',
+        };
     }
   };
 
-  const getIcon = () => {
+  const getIconConfig = () => {
     switch (icon) {
       case 'revenue':
-        return <TrendingUp className="w-4 h-4 text-emerald-400" />;
+        return {
+          component: <TrendingUp className="w-4 h-4 text-emerald-400" />,
+          bg: 'bg-emerald-500/20',
+        };
       case 'profit':
-        return <DollarSign className="w-4 h-4 text-primary-400" />;
+        return {
+          component: <DollarSign className="w-4 h-4 text-indigo-400" />,
+          bg: 'bg-indigo-500/20',
+        };
       case 'burn':
-        return <Flame className="w-4 h-4 text-orange-400" />;
+        return {
+          component: <Flame className="w-4 h-4 text-orange-400" />,
+          bg: 'bg-orange-500/20',
+        };
       case 'expense':
-        return <Receipt className="w-4 h-4 text-surface-400" />;
+        return {
+          component: <Receipt className="w-4 h-4 text-white/60" />,
+          bg: 'bg-white/10',
+        };
       default:
         return null;
     }
   };
 
+  const statusStyles = getStatusStyles();
+  const iconConfig = getIconConfig();
+
   return (
-    <div className="bg-surface-800 border border-surface-700 rounded-xl p-4 hover:border-surface-600 transition-all duration-200">
+    <div className="glass-card p-4 group">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-xs font-medium text-surface-400 uppercase tracking-wider">
+        <span className="text-xs font-medium text-white/50 uppercase tracking-wider">
           {label}
         </span>
         <div className="flex items-center gap-2">
-          {getIcon()}
-          <span className={`w-2.5 h-2.5 rounded-full ${getStatusColor()}`} />
+          {iconConfig && (
+            <div className={`w-6 h-6 rounded-md ${iconConfig.bg} flex items-center justify-center`}>
+              {iconConfig.component}
+            </div>
+          )}
+          <span
+            className={`w-2.5 h-2.5 rounded-full ${statusStyles.dot} ${statusStyles.glow}`}
+          />
         </div>
       </div>
       <div className="text-2xl font-bold text-white">{value}</div>
       {subtitle && (
-        <div className="text-sm text-surface-400 mt-1">{subtitle}</div>
+        <div className="text-sm text-white/40 mt-1">{subtitle}</div>
       )}
     </div>
   );

@@ -10,24 +10,21 @@ export function InsightCard({ type, text }: InsightCardProps) {
     switch (type) {
       case 'positive':
         return {
-          bg: 'bg-emerald-500/10',
-          border: 'border-emerald-500/20',
-          accent: 'border-l-emerald-500',
-          icon: <Sparkles className="w-5 h-5 text-emerald-400" />,
+          iconBg: 'bg-emerald-500/20',
+          iconColor: 'text-emerald-400',
+          icon: <Sparkles className="w-4 h-4" />,
         };
       case 'negative':
         return {
-          bg: 'bg-red-500/10',
-          border: 'border-red-500/20',
-          accent: 'border-l-red-500',
-          icon: <AlertTriangle className="w-5 h-5 text-red-400" />,
+          iconBg: 'bg-red-500/20',
+          iconColor: 'text-red-400',
+          icon: <AlertTriangle className="w-4 h-4" />,
         };
       default:
         return {
-          bg: 'bg-primary-500/10',
-          border: 'border-primary-500/20',
-          accent: 'border-l-primary-500',
-          icon: <Lightbulb className="w-5 h-5 text-primary-400" />,
+          iconBg: 'bg-indigo-500/20',
+          iconColor: 'text-indigo-400',
+          icon: <Lightbulb className="w-4 h-4" />,
         };
     }
   };
@@ -35,11 +32,11 @@ export function InsightCard({ type, text }: InsightCardProps) {
   const config = getConfig();
 
   return (
-    <div
-      className={`flex items-start gap-3 p-4 rounded-xl border-l-4 ${config.bg} ${config.border} ${config.accent}`}
-    >
-      <div className="flex-shrink-0 mt-0.5">{config.icon}</div>
-      <p className="text-sm text-surface-200 leading-relaxed">{text}</p>
+    <div className="glass-panel glass-panel-hover flex items-start gap-3 p-4">
+      <div className={`flex-shrink-0 w-8 h-8 rounded-lg ${config.iconBg} ${config.iconColor} flex items-center justify-center`}>
+        {config.icon}
+      </div>
+      <p className="text-sm text-white/70 leading-relaxed pt-1">{text}</p>
     </div>
   );
 }

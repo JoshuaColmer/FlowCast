@@ -57,43 +57,67 @@ export function Dashboard({ data, currency }: DashboardProps) {
     }
   };
 
-  const getHealthColor = (status: string) => {
+  const getHealthStyles = (status: string) => {
     switch (status) {
       case 'green':
-        return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+        return {
+          bg: 'bg-emerald-500/10',
+          text: 'text-emerald-400',
+          border: 'border-emerald-500/20',
+          glow: 'shadow-glow-green',
+        };
       case 'yellow':
-        return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+        return {
+          bg: 'bg-amber-500/10',
+          text: 'text-amber-400',
+          border: 'border-amber-500/20',
+          glow: 'shadow-glow-yellow',
+        };
       case 'red':
-        return 'bg-red-500/20 text-red-400 border-red-500/30';
+        return {
+          bg: 'bg-red-500/10',
+          text: 'text-red-400',
+          border: 'border-red-500/20',
+          glow: 'shadow-glow-red',
+        };
       default:
-        return 'bg-surface-700 text-surface-300 border-surface-600';
+        return {
+          bg: 'bg-white/5',
+          text: 'text-white/60',
+          border: 'border-white/10',
+          glow: '',
+        };
     }
   };
 
   const { metrics, health_summary, insights, charts } = data;
+  const healthStyles = getHealthStyles(health_summary.overall_status);
 
   return (
     <div className="space-y-8 animate-fade-in">
-      {/* Company & Health Badge */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-bold text-white">{data.company}</h2>
-          <p className="text-surface-400">Financial Health Analysis</p>
-        </div>
-        <div
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border ${getHealthColor(
-            health_summary.overall_status
-          )}`}
-        >
-          {getHealthIcon(health_summary.overall_status)}
-          <span className="font-semibold">{health_summary.overall}</span>
+      {/* Company & Health Section */}
+      <div className="glass-panel p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-bold text-white">{data.company}</h2>
+            <p className="text-white/50">Financial Health Analysis</p>
+          </div>
+          <div
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border
+                      ${healthStyles.bg} ${healthStyles.text} ${healthStyles.border} ${healthStyles.glow}`}
+          >
+            {getHealthIcon(health_summary.overall_status)}
+            <span className="font-semibold">{health_summary.overall}</span>
+          </div>
         </div>
       </div>
 
       {/* Key Metrics */}
       <section>
         <div className="flex items-center gap-2 mb-4">
-          <TrendingUp className="w-5 h-5 text-primary-400" />
+          <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center">
+            <TrendingUp className="w-4 h-4 text-indigo-400" />
+          </div>
           <h3 className="text-lg font-semibold text-white">Key Metrics</h3>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -119,8 +143,11 @@ export function Dashboard({ data, currency }: DashboardProps) {
           />
         </div>
 
+        {/* Section Divider */}
+        <div className="section-divider my-6" />
+
         {/* Secondary Metrics */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <MetricCard
             label="Total Revenue"
             value={`${currency}${(metrics.total_revenue?.value || 0).toLocaleString()}`}
@@ -153,7 +180,9 @@ export function Dashboard({ data, currency }: DashboardProps) {
       {insights && insights.length > 0 && (
         <section>
           <div className="flex items-center gap-2 mb-4">
-            <Lightbulb className="w-5 h-5 text-amber-400" />
+            <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
+              <Lightbulb className="w-4 h-4 text-amber-400" />
+            </div>
             <h3 className="text-lg font-semibold text-white">Key Insights</h3>
           </div>
           <div className="space-y-3">
@@ -167,7 +196,9 @@ export function Dashboard({ data, currency }: DashboardProps) {
       {/* Charts */}
       <section>
         <div className="flex items-center gap-2 mb-4">
-          <PieChart className="w-5 h-5 text-primary-400" />
+          <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center">
+            <PieChart className="w-4 h-4 text-indigo-400" />
+          </div>
           <h3 className="text-lg font-semibold text-white">Charts & Forecasts</h3>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -191,19 +222,21 @@ export function Dashboard({ data, currency }: DashboardProps) {
         </div>
       </section>
 
-      {/* Export Buttons */}
+      {/* Export Section */}
       <section>
         <div className="flex items-center gap-2 mb-4">
-          <Download className="w-5 h-5 text-primary-400" />
+          <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center">
+            <Download className="w-4 h-4 text-indigo-400" />
+          </div>
           <h3 className="text-lg font-semibold text-white">Download Reports</h3>
         </div>
-        <div className="flex flex-wrap gap-3">
+        <div className="glass-panel p-4 flex flex-wrap gap-3">
           <button
             onClick={() => handleExport('excel')}
             disabled={isExporting !== null}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500
+            className="btn-primary-glow inline-flex items-center gap-2 px-5 py-2.5
                      text-white font-medium rounded-lg transition-all duration-200
-                     disabled:opacity-50 disabled:cursor-not-allowed"
+                     disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
           >
             {isExporting === 'excel' ? (
               <Loader2 size={18} className="animate-spin" />
@@ -215,8 +248,8 @@ export function Dashboard({ data, currency }: DashboardProps) {
           <button
             onClick={() => handleExport('zip')}
             disabled={isExporting !== null}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-surface-700 hover:bg-surface-600
-                     text-surface-200 font-medium rounded-lg transition-all duration-200
+            className="btn-glass inline-flex items-center gap-2 px-5 py-2.5
+                     text-white/80 font-medium rounded-lg
                      disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isExporting === 'zip' ? (
