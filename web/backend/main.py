@@ -42,9 +42,9 @@ app.add_middleware(
         "http://localhost:3000",
         "http://127.0.0.1:5173",
         "http://127.0.0.1:5174",
-        "https://*.vercel.app",  # Vercel preview deployments
+        "https://stunning-croquembouche-304a1a.netlify.app",
     ],
-    allow_origin_regex=r"https://.*\.vercel\.app",  # All Vercel subdomains
+    allow_origin_regex=r"https://.*\.netlify\.app|https://.*\.vercel\.app",  # Netlify and Vercel
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
